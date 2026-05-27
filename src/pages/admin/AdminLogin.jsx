@@ -44,14 +44,14 @@ export default function AdminLogin() {
               <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">Username</label>
               <input type="text" value={username} onChange={e => setUsername(e.target.value)}
                 autoComplete="username"
-                className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none transition-colors placeholder:text-white/20"
+                className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none transition-colors placeholder:text-white/20"
                 placeholder="Enter username" maxLength={50} />
             </div>
             <div>
               <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">Password</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                 autoComplete="current-password"
-                className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none transition-colors placeholder:text-white/20"
+                className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none transition-colors placeholder:text-white/20"
                 placeholder="Enter password" maxLength={100} />
             </div>
           </div>
