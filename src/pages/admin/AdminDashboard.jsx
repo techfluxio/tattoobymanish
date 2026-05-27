@@ -267,7 +267,7 @@ function CategoriesPanel({ refreshCategories }) {
       <div className="glass border border-white/5 p-6 mb-6">
         <div className="flex gap-3">
           <input value={newCat} onChange={e => setNewCat(e.target.value)} placeholder="New category name" maxLength={50}
-            className="flex-1 bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+            className="flex-1 bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none" />
           <button onClick={handleAdd} disabled={loading}
             className="btn-gold glass-gold border border-gold/30 px-6 py-2 font-mono text-xs text-gold uppercase tracking-widest disabled:opacity-50">
             Add
