@@ -15,23 +15,15 @@
 
 html {
   scroll-behavior: smooth;
-  cursor: none;
-  width: 100%;
-  overflow-x: hidden;
+  /* cursor:none is applied via JS only on non-touch devices (see CustomCursor.jsx) */
 }
 
 body {
   background: var(--obsidian);
   color: #fff;
   font-family: 'DM Sans', sans-serif;
-  width: 100%;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-}
-
-#root {
-  width: 100%;
-  overflow-x: hidden;
 }
 
 /* Scrollbar */
