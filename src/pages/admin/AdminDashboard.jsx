@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
 
 const NAV = [
-  { id: 'overview',   label: 'Overview',    icon: '◈' },
-  { id: 'gallery',    label: 'Gallery',     icon: '⬡' },
-  { id: 'videos',     label: 'Videos',      icon: '▷' },
-  { id: 'categories', label: 'Categories',  icon: '⊞' },
-  { id: 'about',      label: 'About Me',    icon: '◉' },
-  { id: 'contact',    label: 'Contact',     icon: '◎' },
-  { id: 'homepage',   label: 'Homepage',    icon: '⌂' },
+  { id: 'overview', label: 'Overview', icon: '◈' },
+  { id: 'gallery', label: 'Gallery', icon: '⬡' },
+  { id: 'videos', label: 'Videos', icon: '▷' },
+  { id: 'categories', label: 'Categories', icon: '⊞' },
+  { id: 'about', label: 'About Me', icon: '◉' },
+  { id: 'contact', label: 'Contact', icon: '◎' },
+  { id: 'homepage', label: 'Homepage', icon: '⌂' },
 ];
 
 // ── Shared upload progress bar ─────────────────────────────────────────────
@@ -32,10 +32,10 @@ function OverviewPanel({ images, videos, categories }) {
       <h2 className="font-display text-3xl text-white font-light mb-8">Dashboard Overview</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
-          { label: 'Total Images',  value: images.length },
-          { label: 'Total Videos',  value: videos.length },
-          { label: 'Categories',    value: categories.length },
-          { label: 'Status',        value: 'Live' },
+          { label: 'Total Images', value: images.length },
+          { label: 'Total Videos', value: videos.length },
+          { label: 'Categories', value: categories.length },
+          { label: 'Status', value: 'Live' },
         ].map(s => (
           <div key={s.label} className="glass border border-white/5 p-5">
             <p className="font-mono text-xs text-white/25 tracking-widest uppercase mb-2">{s.label}</p>
@@ -53,16 +53,16 @@ function OverviewPanel({ images, videos, categories }) {
 
 // ── Gallery ───────────────────────────────────────────────────────────────────
 function GalleryPanel({ images, addImage, deleteImage, categories }) {
-  const [file,     setFile]     = useState(null);
-  const [title,    setTitle]    = useState('');
-  const [category, setCategory] = useState('Default');
-  const [msg,      setMsg]      = useState('');
-  const [loading,  setLoading]  = useState(false);
+  const [file, setFile] = useState(null);
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [deleting, setDeleting] = useState(null);
 
   const handleUpload = async () => {
-    if (!file || !title) { setMsg('File and title required.'); return; }
+    if (!file || !title || !category) { setMsg('File, title, and category required.'); return; }
     setLoading(true); setMsg(''); setProgress(0);
     try {
       const form = new FormData();
@@ -74,7 +74,7 @@ function GalleryPanel({ images, addImage, deleteImage, categories }) {
         onUploadProgress: (e) => setProgress(Math.round((e.loaded / e.total) * 100)),
       });
       addImage(data.image);
-      setFile(null); setTitle(''); setProgress(0);
+      setFile(null); setTitle(''); setCategory(''); setProgress(0);
       setMsg('✓ Image uploaded');
     } catch (err) {
       setMsg(err.response?.data?.message || 'Upload failed');
@@ -103,9 +103,20 @@ function GalleryPanel({ images, addImage, deleteImage, categories }) {
           </label>
           <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" maxLength={100}
             className="bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none" />
-          <select value={category} onChange={e => setCategory(e.target.value)}
-            className="bg-charcoal border border-white/10 text-white/70 font-sans text-sm px-4 py-3 outline-none">
-            {categories.filter(c => c !== 'All').map(c => <option key={c}>{c}</option>)}
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="bg-charcoal border border-white/10 text-white/70 font-sans text-sm px-4 py-3 outline-none"
+          >
+            <option value="">Select Category</option>
+
+            {categories
+              .filter(c => c !== 'All')
+              .map(c => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
           </select>
         </div>
         <button onClick={handleUpload} disabled={loading}
@@ -138,27 +149,29 @@ function GalleryPanel({ images, addImage, deleteImage, categories }) {
 
 // ── Videos ────────────────────────────────────────────────────────────────────
 function VideosPanel({ videos, addVideo, deleteVideo }) {
-  const [file,     setFile]     = useState(null);
-  const [title,    setTitle]    = useState('');
-  const [msg,      setMsg]      = useState('');
-  const [loading,  setLoading]  = useState(false);
+  const [file, setFile] = useState(null);
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [deleting, setDeleting] = useState(null);
 
   const handleUpload = async () => {
-    if (!file || !title) { setMsg('File and title required.'); return; }
+    if (!file || !title || !category) { setMsg('File, title, and category required.'); return; }
     setLoading(true); setMsg(''); setProgress(0);
     try {
       const form = new FormData();
       form.append('video', file);
       form.append('title', title);
+      form.append('category', category);
       const { data } = await api.post('/videos', form, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (e) => setProgress(Math.round((e.loaded / e.total) * 100)),
         timeout: 5 * 60 * 1000, // 5 min for large files
       });
       addVideo(data.video);
-      setFile(null); setTitle(''); setProgress(0);
+      setFile(null); setTitle(''); setCategory(''); setProgress(0);
       setMsg('✓ Video uploaded');
     } catch (err) {
       setMsg(err.response?.data?.message || 'Upload failed');
@@ -186,6 +199,20 @@ function VideosPanel({ videos, addVideo, deleteVideo }) {
           </label>
           <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" maxLength={100}
             className="bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none"
+          >
+            <option value="">Select Category</option>
+            {categories
+              .filter(c => c !== 'All')
+              .map(c => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+          </select>
         </div>
         <button onClick={handleUpload} disabled={loading}
           className="btn-gold glass-gold border border-gold/30 px-6 py-2 font-mono text-xs text-gold uppercase tracking-widest disabled:opacity-50">
@@ -216,10 +243,10 @@ function VideosPanel({ videos, addVideo, deleteVideo }) {
 
 // ── Categories ────────────────────────────────────────────────────────────────
 function CategoriesPanel({ refreshCategories }) {
-  const [cats,    setCats]    = useState([]);
-  const [newCat,  setNewCat]  = useState('');
+  const [cats, setCats] = useState([]);
+  const [newCat, setNewCat] = useState('');
   const [editMap, setEditMap] = useState({});
-  const [msg,     setMsg]     = useState('');
+  const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
   const load = async () => {
@@ -296,17 +323,17 @@ function CategoriesPanel({ refreshCategories }) {
 
 // ── About ─────────────────────────────────────────────────────────────────────
 function AboutPanel({ about, setAbout }) {
-  const [form,     setForm]     = useState({ ...about, specialties: (about.specialties || []).join(', ') });
-  const [file,     setFile]     = useState(null);
-  const [msg,      setMsg]      = useState('');
-  const [loading,  setLoading]  = useState(false);
+  const [form, setForm] = useState({ ...about, specialties: (about.specialties || []).join(', ') });
+  const [file, setFile] = useState(null);
+  const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const save = async () => {
     setLoading(true); setMsg(''); setProgress(0);
     try {
       const fd = new FormData();
-      const fields = ['name','bio','experience','location','instagram','whatsapp','email'];
+      const fields = ['name', 'bio', 'experience', 'location', 'instagram', 'whatsapp', 'email'];
       fields.forEach(f => fd.append(f, form[f] || ''));
       fd.append('specialties', JSON.stringify(
         form.specialties.split(',').map(s => s.trim()).filter(Boolean)
@@ -328,9 +355,9 @@ function AboutPanel({ about, setAbout }) {
       <h2 className="font-display text-3xl text-white font-light mb-8">About Page</h2>
       <div className="glass border border-white/5 p-6 space-y-4">
         {[
-          ['Artist Name','name',60], ['Location','location',100],
-          ['Experience','experience',20], ['Instagram URL','instagram',200],
-          ['WhatsApp Number','whatsapp',20], ['Email','email',100],
+          ['Artist Name', 'name', 60], ['Location', 'location', 100],
+          ['Experience', 'experience', 20], ['Instagram URL', 'instagram', 200],
+          ['WhatsApp Number', 'whatsapp', 20], ['Email', 'email', 100],
         ].map(([label, key, max]) => (
           <div key={key}>
             <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">{label}</label>
@@ -368,19 +395,19 @@ function AboutPanel({ about, setAbout }) {
 
 // ── Contact ───────────────────────────────────────────────────────────────────
 function ContactPanel({ contact, setContact }) {
-  const [form, setForm]   = useState({ ...contact });
-  const [msg,  setMsg]    = useState('');
+  const [form, setForm] = useState({ ...contact });
+  const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
   const save = async () => {
     setLoading(true);
     try {
       const payload = {
-        instagram:    form.instagram,
+        instagram: form.instagram,
         instagramUrl: form.instagramUrl,
-        whatsapp:     form.whatsapp,
-        email:        form.email,
-        socials:      JSON.stringify(form.socials),
+        whatsapp: form.whatsapp,
+        email: form.email,
+        socials: JSON.stringify(form.socials),
       };
       const { data } = await api.put('/config/contact', payload);
       setContact(data.contact);
@@ -394,8 +421,8 @@ function ContactPanel({ contact, setContact }) {
       <h2 className="font-display text-3xl text-white font-light mb-8">Contact Page</h2>
       <div className="glass border border-white/5 p-6 space-y-4">
         {[
-          ['Instagram Handle','instagram',50], ['Instagram URL','instagramUrl',200],
-          ['WhatsApp Number','whatsapp',20], ['Email','email',100],
+          ['Instagram Handle', 'instagram', 50], ['Instagram URL', 'instagramUrl', 200],
+          ['WhatsApp Number', 'whatsapp', 20], ['Email', 'email', 100],
         ].map(([label, key, max]) => (
           <div key={key}>
             <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">{label}</label>
@@ -415,17 +442,17 @@ function ContactPanel({ contact, setContact }) {
 
 // ── Homepage ──────────────────────────────────────────────────────────────────
 function HomepagePanel({ homepage, setHomepage }) {
-  const [form,     setForm]     = useState({ tagline: homepage.tagline, subtagline: homepage.subtagline });
-  const [file,     setFile]     = useState(null);
-  const [msg,      setMsg]      = useState('');
-  const [loading,  setLoading]  = useState(false);
+  const [form, setForm] = useState({ tagline: homepage.tagline, subtagline: homepage.subtagline });
+  const [file, setFile] = useState(null);
+  const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const save = async () => {
     setLoading(true); setMsg(''); setProgress(0);
     try {
       const fd = new FormData();
-      fd.append('tagline',    form.tagline || '');
+      fd.append('tagline', form.tagline || '');
       fd.append('subtagline', form.subtagline || '');
       if (file) fd.append('heroVideo', file);
 
@@ -444,7 +471,7 @@ function HomepagePanel({ homepage, setHomepage }) {
     <div>
       <h2 className="font-display text-3xl text-white font-light mb-8">Homepage Settings</h2>
       <div className="glass border border-white/5 p-6 space-y-4">
-        {[['Tagline','tagline',100],['Sub-tagline','subtagline',100]].map(([label, key, max]) => (
+        {[['Tagline', 'tagline', 100], ['Sub-tagline', 'subtagline', 100]].map(([label, key, max]) => (
           <div key={key}>
             <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">{label}</label>
             <input value={form[key] || ''} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} maxLength={max}
@@ -471,25 +498,25 @@ function HomepagePanel({ homepage, setHomepage }) {
 
 // ── Dashboard shell ───────────────────────────────────────────────────────────
 export default function AdminDashboard() {
-  const [activePage,   setActivePage]   = useState('overview');
-  const [sidebarOpen,  setSidebarOpen]  = useState(false);
-  const { logout }    = useAuth();
+  const [activePage, setActivePage] = useState('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { logout } = useAuth();
   const { images, addImage, deleteImage, videos, addVideo, deleteVideo,
-          categories, refreshCategories, about, setAbout,
-          contact, setContact, homepage, setHomepage } = useData();
+    categories, refreshCategories, about, setAbout,
+    contact, setContact, homepage, setHomepage } = useData();
   const navigate = useNavigate();
 
   const handleLogout = () => { logout(); navigate('/admin/login'); };
 
   const renderPanel = () => {
     switch (activePage) {
-      case 'overview':   return <OverviewPanel images={images} videos={videos} categories={categories} />;
-      case 'gallery':    return <GalleryPanel images={images} addImage={addImage} deleteImage={deleteImage} categories={categories} />;
-      case 'videos':     return <VideosPanel videos={videos} addVideo={addVideo} deleteVideo={deleteVideo} />;
+      case 'overview': return <OverviewPanel images={images} videos={videos} categories={categories} />;
+      case 'gallery': return <GalleryPanel images={images} addImage={addImage} deleteImage={deleteImage} categories={categories} />;
+      case 'videos': return <VideosPanel videos={videos} addVideo={addVideo} deleteVideo={deleteVideo} />;
       case 'categories': return <CategoriesPanel refreshCategories={refreshCategories} />;
-      case 'about':      return <AboutPanel about={about} setAbout={setAbout} />;
-      case 'contact':    return <ContactPanel contact={contact} setContact={setContact} />;
-      case 'homepage':   return <HomepagePanel homepage={homepage} setHomepage={setHomepage} />;
+      case 'about': return <AboutPanel about={about} setAbout={setAbout} />;
+      case 'contact': return <ContactPanel contact={contact} setContact={setContact} />;
+      case 'homepage': return <HomepagePanel homepage={homepage} setHomepage={setHomepage} />;
       default: return null;
     }
   };
