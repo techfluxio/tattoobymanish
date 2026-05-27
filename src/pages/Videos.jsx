@@ -185,30 +185,82 @@ function VideoPlayer({ video, onClose }) {
 }
 
 export default function Videos() {
-  const { videos } = useData();
+  const { videos, categories } = useData();
+
   const [count, setCount] = useState(INITIAL_COUNT);
   const [activeVideo, setActiveVideo] = useState(null);
-  const visible = videos.slice(0, count);
-  const hasMore = count < videos.length;
+  const [activeCategory, setActiveCategory] = useState('All');
+
+  // Filter videos by category
+  const filtered =
+    activeCategory === 'All'
+      ? videos
+      : videos.filter(v => v.category === activeCategory);
+
+  const visible = filtered.slice(0, count);
+
+  const hasMore = count < filtered.length;
+
+  const handleCategoryChange = useCallback((cat) => {
+    setActiveCategory(cat);
+    setCount(INITIAL_COUNT);
+  }, []);
 
   return (
     <PageTransition>
       <div className="min-h-screen bg-obsidian pt-28 pb-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="font-mono text-xs text-gold tracking-widest uppercase block mb-3">
+
+          {/* Header */}
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="font-mono text-xs text-gold tracking-widest uppercase block mb-3"
+          >
             Studio Reel
           </motion.span>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.8 }}
-            className="font-display text-5xl md:text-7xl text-white font-light mb-16">
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.8 }}
+            className="font-display text-5xl md:text-7xl text-white font-light mb-10"
+          >
             Videos
           </motion.h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {visible.map(v => (
-              <VideoCard key={v.id} video={v} onClick={setActiveVideo} />
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-3 mb-12">
+            {categories.map((cat, i) => (
+              <motion.button
+                key={cat}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + i * 0.05 }}
+                onClick={() => handleCategoryChange(cat)}
+                className={`px-5 py-2 font-sans text-xs tracking-widest uppercase transition-all duration-300 border ${
+                  activeCategory === cat
+                    ? 'border-gold text-gold glass-gold'
+                    : 'border-white/10 text-white/40 hover:border-white/30 hover:text-white/70'
+                }`}
+              >
+                {cat}
+              </motion.button>
             ))}
           </div>
 
+          {/* Videos Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            {visible.map(v => (
+              <VideoCard
+                key={v.id}
+                video={v}
+                onClick={setActiveVideo}
+              />
+            ))}
+          </div>
+
+          {/* Load More */}
           {hasMore && (
             <div className="text-center mt-14">
               <button
@@ -219,11 +271,24 @@ export default function Videos() {
               </button>
             </div>
           )}
+
+          {/* Empty State */}
+          {filtered.length === 0 && (
+            <div className="text-center py-24 text-white/30 font-display text-2xl italic">
+              No videos in this category yet.
+            </div>
+          )}
         </div>
       </div>
 
+      {/* Video Player */}
       <AnimatePresence>
-        {activeVideo && <VideoPlayer video={activeVideo} onClose={() => setActiveVideo(null)} />}
+        {activeVideo && (
+          <VideoPlayer
+            video={activeVideo}
+            onClose={() => setActiveVideo(null)}
+          />
+        )}
       </AnimatePresence>
     </PageTransition>
   );
