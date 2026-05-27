@@ -1,58 +1,45 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../utils/api';
 
 const AuthContext = createContext(null);
 
-// In production, use env variables & backend auth. This is a client-side demo.
-const ADMIN_CREDENTIALS = {
-  username: process.env.REACT_APP_ADMIN_USER || 'manish',
-  // In production: compare against bcrypt hash via secure API
-  passwordHash: process.env.REACT_APP_ADMIN_PASS || 'TattooByManish@2024!'
-};
-
-const RATE_LIMIT = { max: 5, window: 15 * 60 * 1000 };
-
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loginAttempts, setLoginAttempts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const session = sessionStorage.getItem('tbm_admin_session');
-    if (session) {
-      try {
-        const { token, exp } = JSON.parse(atob(session));
-        if (token === 'tbm_authenticated' && exp > Date.now()) {
-          setIsAuthenticated(true);
-        } else {
-          sessionStorage.removeItem('tbm_admin_session');
-        }
-      } catch { sessionStorage.removeItem('tbm_admin_session'); }
-    }
+    const token = sessionStorage.getItem('tbm_token');
+    if (!token) { setLoading(false); return; }
+    // Verify token is still valid
+    api.get('/auth/me')
+      .then(() => setIsAuthenticated(true))
+      .catch(() => {
+        sessionStorage.removeItem('tbm_token');
+        sessionStorage.removeItem('tbm_admin');
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const login = (username, password) => {
-    const now = Date.now();
-    const recent = loginAttempts.filter(t => now - t < RATE_LIMIT.window);
-    if (recent.length >= RATE_LIMIT.max) {
-      return { success: false, error: 'Too many attempts. Please wait 15 minutes.' };
-    }
-    setLoginAttempts(prev => [...prev.filter(t => now - t < RATE_LIMIT.window), now]);
-    const sanitizedUser = username.replace(/[<>"'/]/g, '');
-    if (sanitizedUser === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.passwordHash) {
-      const session = btoa(JSON.stringify({ token: 'tbm_authenticated', exp: Date.now() + 8 * 60 * 60 * 1000 }));
-      sessionStorage.setItem('tbm_admin_session', session);
+  const login = async (username, password) => {
+    try {
+      const { data } = await api.post('/auth/login', { username, password });
+      sessionStorage.setItem('tbm_token', data.token);
+      sessionStorage.setItem('tbm_admin', JSON.stringify(data.admin));
       setIsAuthenticated(true);
       return { success: true };
+    } catch (err) {
+      return { success: false, error: err.response?.data?.message || 'Login failed' };
     }
-    return { success: false, error: 'Invalid credentials.' };
   };
 
   const logout = () => {
-    sessionStorage.removeItem('tbm_admin_session');
+    sessionStorage.removeItem('tbm_token');
+    sessionStorage.removeItem('tbm_admin');
     setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
