@@ -151,88 +151,181 @@ function GalleryPanel({ images, addImage, deleteImage, categories }) {
 function VideosPanel({ videos, addVideo, deleteVideo }) {
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [deleting, setDeleting] = useState(null);
 
   const handleUpload = async () => {
-    if (!file || !title || !category) { setMsg('File, title, and category required.'); return; }
-    setLoading(true); setMsg(''); setProgress(0);
+    if (!file || !title) {
+      setMsg('File and title required.');
+      return;
+    }
+
+    setLoading(true);
+    setMsg('');
+    setProgress(0);
+
     try {
       const form = new FormData();
+
       form.append('video', file);
       form.append('title', title);
-      form.append('category', category);
+
       const { data } = await api.post('/videos', form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: (e) => setProgress(Math.round((e.loaded / e.total) * 100)),
-        timeout: 5 * 60 * 1000, // 5 min for large files
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+
+        onUploadProgress: (e) =>
+          setProgress(
+            Math.round((e.loaded / e.total) * 100)
+          ),
+
+        timeout: 5 * 60 * 1000,
       });
+
       addVideo(data.video);
-      setFile(null); setTitle(''); setCategory(''); setProgress(0);
+
+      setFile(null);
+      setTitle('');
+      setProgress(0);
+
       setMsg('✓ Video uploaded');
     } catch (err) {
-      setMsg(err.response?.data?.message || 'Upload failed');
+      setMsg(
+        err.response?.data?.message || 'Upload failed'
+      );
     } finally {
       setLoading(false);
+
       setTimeout(() => setMsg(''), 4000);
     }
   };
 
   const handleDelete = async (id) => {
     setDeleting(id);
-    try { await deleteVideo(id); }
-    finally { setDeleting(null); }
+
+    try {
+      await deleteVideo(id);
+    } finally {
+      setDeleting(null);
+    }
   };
 
   return (
     <div>
-      <h2 className="font-display text-3xl text-white font-light mb-8">Video Management</h2>
+      <h2 className="font-display text-3xl text-white font-light mb-8">
+        Video Management
+      </h2>
+
+      {/* Upload Section */}
       <div className="glass border border-white/5 p-6 mb-8">
-        <p className="font-mono text-xs text-gold/50 tracking-widest uppercase mb-4">Upload Video</p>
+        <p className="font-mono text-xs text-gold/50 tracking-widest uppercase mb-4">
+          Upload Video
+        </p>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+
+          {/* File Upload */}
           <label className="flex items-center gap-3 bg-white/3 border border-white/10 px-4 py-3 cursor-pointer hover:border-gold/30 transition-colors">
-            <span className="font-sans text-sm text-white/40 truncate">{file ? file.name : 'Choose video file (mp4/mov/webm)…'}</span>
-            <input type="file" accept="video/mp4,video/quicktime,video/webm" className="hidden" onChange={e => setFile(e.target.files[0])} />
+            <span className="font-sans text-sm text-white/40 truncate">
+              {file
+                ? file.name
+                : 'Choose video file (mp4/mov/webm)…'}
+            </span>
+
+            <input
+              type="file"
+              accept="video/mp4,video/quicktime,video/webm"
+              className="hidden"
+              onChange={(e) =>
+                setFile(e.target.files[0])
+              }
+            />
           </label>
-          <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" maxLength={100}
-            className="bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+
+          {/* Title */}
+          <input
+            value={title}
+            onChange={(e) =>
+              setTitle(e.target.value)
+            }
+            placeholder="Video Title"
+            maxLength={100}
             className="bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none"
-          >
-            <option value="">Select Category</option>
-            {categories
-              .filter(c => c !== 'All')
-              .map(c => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-          </select>
+          />
         </div>
-        <button onClick={handleUpload} disabled={loading}
-          className="btn-gold glass-gold border border-gold/30 px-6 py-2 font-mono text-xs text-gold uppercase tracking-widest disabled:opacity-50">
-          {loading ? 'Uploading…' : 'Upload to Cloudinary'}
+
+        {/* Upload Button */}
+        <button
+          onClick={handleUpload}
+          disabled={loading}
+          className="btn-gold glass-gold border border-gold/30 px-6 py-2 font-mono text-xs text-gold uppercase tracking-widest disabled:opacity-50"
+        >
+          {loading
+            ? 'Uploading…'
+            : 'Upload to Cloudinary'}
         </button>
+
         <ProgressBar pct={progress} />
-        {loading && <p className="font-sans text-xs text-white/30 mt-2">Large videos may take a few minutes…</p>}
-        {msg && <p className="font-mono text-xs text-gold mt-2">{msg}</p>}
+
+        {loading && (
+          <p className="font-sans text-xs text-white/30 mt-2">
+            Large videos may take a few minutes…
+          </p>
+        )}
+
+        {msg && (
+          <p className="font-mono text-xs text-gold mt-2">
+            {msg}
+          </p>
+        )}
       </div>
+
+      {/* Videos List */}
       <div className="space-y-3">
-        {videos.map(v => (
-          <div key={v.id} className="glass border border-white/5 flex items-center gap-4 p-4">
-            {v.thumbnail && <img src={v.thumbnail} alt="" className="w-20 h-12 object-cover flex-shrink-0" />}
+
+        {videos.length === 0 && (
+          <div className="glass border border-white/5 p-8 text-center">
+            <p className="font-display text-2xl text-white/30 italic">
+              No videos uploaded yet.
+            </p>
+          </div>
+        )}
+
+        {videos.map((v) => (
+          <div
+            key={v.id}
+            className="glass border border-white/5 flex items-center gap-4 p-4"
+          >
+
+            {v.thumbnail && (
+              <img
+                src={v.thumbnail}
+                alt=""
+                className="w-20 h-12 object-cover flex-shrink-0"
+              />
+            )}
+
             <div className="flex-1 min-w-0">
-              <p className="font-display text-white">{v.title}</p>
-              <p className="font-mono text-xs text-white/30 truncate">{v.src}</p>
+              <p className="font-display text-white">
+                {v.title}
+              </p>
+
+              <p className="font-mono text-xs text-white/30 truncate">
+                {v.src}
+              </p>
             </div>
-            <button onClick={() => handleDelete(v.id)} disabled={deleting === v.id}
-              className="font-mono text-xs text-red-400/60 hover:text-red-400 border border-red-400/15 px-3 py-1 flex-shrink-0 transition-colors disabled:opacity-50">
-              {deleting === v.id ? '…' : 'Delete'}
+
+            <button
+              onClick={() => handleDelete(v.id)}
+              disabled={deleting === v.id}
+              className="font-mono text-xs text-red-400/60 hover:text-red-400 border border-red-400/15 px-3 py-1 flex-shrink-0 transition-colors disabled:opacity-50"
+            >
+              {deleting === v.id
+                ? '…'
+                : 'Delete'}
             </button>
           </div>
         ))}
