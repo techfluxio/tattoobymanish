@@ -56,7 +56,7 @@ const updateAbout = async (req, res, next) => {
       }
     });
 
-    if (req.body.specialties) {
+    if (req.body.specialties !== undefined) {
       try {
         const specs = JSON.parse(req.body.specialties);
         update['about.specialties'] = specs.slice(0, 10).map(s => String(s).slice(0, 50));
