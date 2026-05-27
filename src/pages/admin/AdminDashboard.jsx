@@ -253,7 +253,7 @@ function VideosPanel({ videos, addVideo, deleteVideo }) {
             }
             placeholder="Video Title"
             maxLength={100}
-            className="bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none"
+            className="bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none"
           />
         </div>
 
