@@ -102,7 +102,7 @@ function GalleryPanel({ images, addImage, deleteImage, categories }) {
             <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={e => setFile(e.target.files[0])} />
           </label>
           <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" maxLength={100}
-            className="bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+            className="bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none" />
           <select value={category} onChange={e => setCategory(e.target.value)}
             className="bg-charcoal border border-white/10 text-white/70 font-sans text-sm px-4 py-3 outline-none">
             {categories.filter(c => c !== 'All').map(c => <option key={c}>{c}</option>)}
