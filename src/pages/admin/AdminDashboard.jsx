@@ -448,7 +448,7 @@ function HomepagePanel({ homepage, setHomepage }) {
           <div key={key}>
             <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">{label}</label>
             <input value={form[key] || ''} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} maxLength={max}
-              className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+              className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none" />
           </div>
         ))}
         <div>
