@@ -55,7 +55,7 @@ function OverviewPanel({ images, videos, categories }) {
 function GalleryPanel({ images, addImage, deleteImage, categories }) {
   const [file,     setFile]     = useState(null);
   const [title,    setTitle]    = useState('');
-  const [category, setCategory] = useState('Blackwork');
+  const [category, setCategory] = useState('Default');
   const [msg,      setMsg]      = useState('');
   const [loading,  setLoading]  = useState(false);
   const [progress, setProgress] = useState(0);
