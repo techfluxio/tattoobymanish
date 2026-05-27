@@ -283,7 +283,7 @@ function CategoriesPanel({ refreshCategories }) {
               value={editMap[cat._id] ?? ''}
               onChange={e => setEditMap(m => ({ ...m, [cat._id]: e.target.value }))}
               placeholder="Rename…" maxLength={50}
-              className="w-28 bg-white/3 border border-white/10 focus:border-gold/50 text-white text-xs px-3 py-2 outline-none"
+              className="w-28 bg-white/3 border border-white/10 focus:border-gold/50 text-black text-xs px-3 py-2 outline-none"
             />
             <button onClick={() => handleEdit(cat._id)} className="font-mono text-xs text-gold/60 hover:text-gold border border-gold/15 px-3 py-1 transition-colors">Save</button>
             <button onClick={() => handleDelete(cat._id)} className="font-mono text-xs text-red-400/60 hover:text-red-400 border border-red-400/15 px-3 py-1 transition-colors">Delete</button>
@@ -335,18 +335,18 @@ function AboutPanel({ about, setAbout }) {
           <div key={key}>
             <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">{label}</label>
             <input value={form[key] || ''} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} maxLength={max}
-              className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+              className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none" />
           </div>
         ))}
         <div>
           <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">Bio</label>
           <textarea value={form.bio || ''} onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} rows={5} maxLength={1000}
-            className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none resize-none" />
+            className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none resize-none" />
         </div>
         <div>
           <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">Specialties (comma separated)</label>
           <input value={form.specialties} onChange={e => setForm(f => ({ ...f, specialties: e.target.value }))} maxLength={300}
-            className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+            className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none" />
         </div>
         <div>
           <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">Artist Photo</label>
@@ -400,7 +400,7 @@ function ContactPanel({ contact, setContact }) {
           <div key={key}>
             <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">{label}</label>
             <input value={form[key] || ''} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} maxLength={max}
-              className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+              className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-black font-sans text-sm px-4 py-3 outline-none" />
           </div>
         ))}
         <button onClick={save} disabled={loading}
