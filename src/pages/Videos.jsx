@@ -185,26 +185,14 @@ function VideoPlayer({ video, onClose }) {
 }
 
 export default function Videos() {
-  const { videos, categories } = useData();
+  const { videos } = useData();
 
   const [count, setCount] = useState(INITIAL_COUNT);
   const [activeVideo, setActiveVideo] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('All');
 
-  // Filter videos by category
-  const filtered =
-    activeCategory === 'All'
-      ? videos
-      : videos.filter(v => v.category === activeCategory);
+  const visible = videos.slice(0, count);
 
-  const visible = filtered.slice(0, count);
-
-  const hasMore = count < filtered.length;
-
-  const handleCategoryChange = useCallback((cat) => {
-    setActiveCategory(cat);
-    setCount(INITIAL_COUNT);
-  }, []);
+  const hasMore = count < videos.length;
 
   return (
     <PageTransition>
@@ -224,30 +212,10 @@ export default function Videos() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.8 }}
-            className="font-display text-5xl md:text-7xl text-white font-light mb-10"
+            className="font-display text-5xl md:text-7xl text-white font-light mb-16"
           >
             Videos
           </motion.h1>
-
-          {/* Category Filters */}
-          <div className="flex flex-wrap gap-3 mb-12">
-            {categories.map((cat, i) => (
-              <motion.button
-                key={cat}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.05 }}
-                onClick={() => handleCategoryChange(cat)}
-                className={`px-5 py-2 font-sans text-xs tracking-widest uppercase transition-all duration-300 border ${
-                  activeCategory === cat
-                    ? 'border-gold text-gold glass-gold'
-                    : 'border-white/10 text-white/40 hover:border-white/30 hover:text-white/70'
-                }`}
-              >
-                {cat}
-              </motion.button>
-            ))}
-          </div>
 
           {/* Videos Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -273,9 +241,9 @@ export default function Videos() {
           )}
 
           {/* Empty State */}
-          {filtered.length === 0 && (
+          {videos.length === 0 && (
             <div className="text-center py-24 text-white/30 font-display text-2xl italic">
-              No videos in this category yet.
+              No videos uploaded yet.
             </div>
           )}
         </div>
