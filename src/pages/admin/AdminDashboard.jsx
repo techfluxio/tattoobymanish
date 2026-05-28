@@ -500,6 +500,41 @@ function ContactPanel({ contact, setContact }) {
               className="w-full bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
           </div>
         ))}
+
+        {/* YouTube Handle */}
+        <div>
+          <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">YouTube Handle</label>
+          <input
+            value={form.socials?.find(s => s.platform === 'YouTube')?.handle || ''}
+            onChange={e => setForm(f => ({
+              ...f,
+              socials: f.socials.map(s =>
+                s.platform === 'YouTube' ? { ...s, handle: e.target.value } : s
+              )
+            }))}
+            maxLength={80}
+            placeholder="TattooByManish"
+            className="w-full bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none"
+          />
+        </div>
+
+        {/* YouTube URL */}
+        <div>
+          <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">YouTube URL</label>
+          <input
+            value={form.socials?.find(s => s.platform === 'YouTube')?.url || ''}
+            onChange={e => setForm(f => ({
+              ...f,
+              socials: f.socials.map(s =>
+                s.platform === 'YouTube' ? { ...s, url: e.target.value } : s
+              )
+            }))}
+            maxLength={200}
+            placeholder="https://youtube.com/@tattoobymanish"
+            className="w-full bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none"
+          />
+        </div>
+
         <div>
           <button onClick={save} disabled={loading}
             className="btn-gold glass-gold border border-gold/30 px-8 py-3 font-mono text-xs text-gold uppercase tracking-widest disabled:opacity-50">
