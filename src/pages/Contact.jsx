@@ -77,7 +77,7 @@ export default function Contact() {
               </div>
               <div className="flex-1">
                 <p className="font-sans text-xs text-white/30 tracking-widest uppercase mb-1">WhatsApp · Mobile</p>
-                <p className="font-display text-xl text-white">{contact.whatsapp}</p>
+                <p className="font-display text-xl text-white group-hover:text-gold transition-colors">{contact.whatsapp}</p>
               </div>
               <span className="font-mono text-xs text-white/20 group-hover:text-gold transition-all duration-300 group-hover:translate-x-1">→</span>
             </motion.a>
@@ -93,7 +93,7 @@ export default function Contact() {
               </div>
               <div className="flex-1">
                 <p className="font-sans text-xs text-white/30 tracking-widest uppercase mb-1">YouTube</p>
-                <p className="font-display text-xl text-white">@tattoobymanish</p>
+                <p className="font-display text-xl text-white group-hover:text-gold transition-colors">@tattoobymanish</p>
               </div>
               <span className="font-mono text-xs text-white/20 group-hover:text-gold transition-all duration-300 group-hover:translate-x-1">→</span>
             </motion.a>
@@ -109,7 +109,7 @@ export default function Contact() {
               </div>
               <div className="flex-1">
                 <p className="font-sans text-xs text-white/30 tracking-widest uppercase mb-1">Email</p>
-                <p className="font-display text-xl text-white">{contact.email}</p>
+                <p className="font-display text-xl text-white group-hover:text-gold transition-colors">{contact.email}</p>
               </div>
               <span className="font-mono text-xs text-white/20 group-hover:text-gold transition-all duration-300 group-hover:translate-x-1">→</span>
             </motion.a>
