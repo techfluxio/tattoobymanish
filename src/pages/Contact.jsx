@@ -56,7 +56,7 @@ export default function Contact() {
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
               className="group flex items-center gap-5 glass border border-white/5 hover:border-gold/40 p-6 transition-all duration-400"
             >
-              <div className="w-12 h-12 glass-gold border border-gold/30 flex items-center justify-center text-gold group-hover:border-gold transition-colors flex-shrink-0">
+              <div className="w-12 h-12 glass-gold border border-gold/30 flex items-center justify-center text-white group-hover:border-gold transition-colors flex-shrink-0">
                 {icons.Instagram}
               </div>
               <div className="flex-1">
