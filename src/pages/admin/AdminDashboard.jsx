@@ -75,7 +75,7 @@ function OverviewPanel({ images, videos, categories }) {
 function GalleryPanel({ images, addImage, deleteImage, categories }) {
   const [file,     setFile]     = useState(null);
   const [title,    setTitle]    = useState('');
-  const [category, setCategory] = useState('Blackwork');
+  const [category, setCategory] = useState('');
   const [msg,      setMsg]      = useState({ text: '', type: 'gold' });
   const [loading,  setLoading]  = useState(false);
   const [progress, setProgress] = useState(0);
@@ -125,7 +125,7 @@ function GalleryPanel({ images, addImage, deleteImage, categories }) {
       <div className="glass border border-white/5 p-5 mb-6">
         <p className="font-mono text-xs text-gold/50 tracking-widest uppercase mb-4">Upload Image</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
-          <label className="flex items-center gap-2 bg-white/3 border border-white/10 hover:border-gold/30 px-4 py-3 cursor-pointer transition-colors sm:col-span-2 lg:col-span-1 min-w-0">
+          <label className="flex items-center gap-2 bg-[#1a1a1a] border border-white/10 hover:border-gold/30 px-4 py-3 cursor-pointer transition-colors sm:col-span-2 lg:col-span-1 min-w-0">
             <span className="font-sans text-sm text-white/40 truncate">{file ? file.name : 'Choose image…'}</span>
             <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden"
               onChange={e => setFile(e.target.files[0])} />
@@ -135,10 +135,11 @@ function GalleryPanel({ images, addImage, deleteImage, categories }) {
             onChange={e => setTitle(e.target.value)}
             placeholder="Title"
             maxLength={100}
-            className="bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none"
+            className="bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none"
           />
           <select value={category} onChange={e => setCategory(e.target.value)}
-            className="bg-charcoal border border-white/10 text-white/70 font-sans text-sm px-4 py-3 outline-none">
+            className="bg-[#1a1a1a] border border-white/10 text-white font-sans text-sm px-4 py-3 outline-none">
+            <option value="" disabled>Select Category</option>
             {cats.map(c => <option key={c}>{c}</option>)}
           </select>
         </div>
@@ -226,13 +227,13 @@ function VideosPanel({ videos, addVideo, deleteVideo }) {
       <div className="glass border border-white/5 p-5 mb-6">
         <p className="font-mono text-xs text-gold/50 tracking-widest uppercase mb-4">Upload Video</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-          <label className="flex items-center gap-2 bg-white/3 border border-white/10 hover:border-gold/30 px-4 py-3 cursor-pointer transition-colors min-w-0">
+          <label className="flex items-center gap-2 bg-[#1a1a1a] border border-white/10 hover:border-gold/30 px-4 py-3 cursor-pointer transition-colors min-w-0">
             <span className="font-sans text-sm text-white/40 truncate">{file ? file.name : 'Choose video (mp4/mov/webm)…'}</span>
             <input type="file" accept="video/mp4,video/quicktime,video/webm" className="hidden"
               onChange={e => setFile(e.target.files[0])} />
           </label>
           <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" maxLength={100}
-            className="bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+            className="bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
         </div>
         <button onClick={handleUpload} disabled={loading}
           className="btn-gold glass-gold border border-gold/30 px-6 py-2 font-mono text-xs text-gold uppercase tracking-widest disabled:opacity-50">
@@ -328,7 +329,7 @@ function CategoriesPanel({ refreshCategories }) {
         <div className="flex gap-3">
           <input value={newCat} onChange={e => setNewCat(e.target.value)} placeholder="New category name" maxLength={50}
             onKeyDown={e => e.key === 'Enter' && handleAdd()}
-            className="flex-1 bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none min-w-0" />
+            className="flex-1 bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none min-w-0" />
           <button onClick={handleAdd} disabled={busy === 'add'}
             className="btn-gold glass-gold border border-gold/30 px-5 py-2 font-mono text-xs text-gold uppercase tracking-widest disabled:opacity-50 flex-shrink-0">
             {busy === 'add' ? '…' : 'Add'}
@@ -347,7 +348,7 @@ function CategoriesPanel({ refreshCategories }) {
               onChange={e => setEditMap(m => ({ ...m, [cat._id]: e.target.value }))}
               placeholder="Rename…" maxLength={50}
               onKeyDown={e => e.key === 'Enter' && handleEdit(cat._id)}
-              className="w-28 bg-white/3 border border-white/10 focus:border-gold/50 text-white text-xs px-3 py-2 outline-none flex-shrink-0"
+              className="w-28 bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white text-xs px-3 py-2 outline-none flex-shrink-0"
             />
             <button onClick={() => handleEdit(cat._id)} disabled={busy === cat._id}
               className="font-mono text-xs text-gold/60 hover:text-gold border border-gold/15 px-3 py-1 transition-colors disabled:opacity-50 flex-shrink-0">
@@ -416,23 +417,23 @@ function AboutPanel({ about, setAbout }) {
           <div key={key}>
             <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">{label}</label>
             <input value={form[key] || ''} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} maxLength={max}
-              className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+              className="w-full bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
           </div>
         ))}
         <div>
           <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">Bio</label>
           <textarea value={form.bio || ''} onChange={e => setForm(f => ({ ...f, bio: e.target.value }))}
             rows={4} maxLength={1000}
-            className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none resize-none" />
+            className="w-full bg-[#0d0d0d] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none resize-none placeholder:text-white/20" />
         </div>
         <div>
           <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">Specialties (comma separated)</label>
           <input value={form.specialties} onChange={e => setForm(f => ({ ...f, specialties: e.target.value }))} maxLength={300}
-            className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+            className="w-full bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
         </div>
         <div>
           <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">Artist Photo</label>
-          <label className="inline-flex items-center gap-2 bg-white/3 border border-white/10 hover:border-gold/30 px-4 py-3 cursor-pointer transition-colors max-w-full">
+          <label className="inline-flex items-center gap-2 bg-[#1a1a1a] border border-white/10 hover:border-gold/30 px-4 py-3 cursor-pointer transition-colors max-w-full">
             <span className="font-sans text-sm text-white/40 truncate max-w-xs">{file ? file.name : 'Replace photo…'}</span>
             <input type="file" accept="image/*" className="hidden" onChange={e => setFile(e.target.files[0])} />
           </label>
@@ -496,7 +497,7 @@ function ContactPanel({ contact, setContact }) {
           <div key={key}>
             <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">{label}</label>
             <input value={form[key] || ''} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} maxLength={max}
-              className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+              className="w-full bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
           </div>
         ))}
         <div>
@@ -555,12 +556,12 @@ function HomepagePanel({ homepage, setHomepage }) {
           <div key={key}>
             <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">{label}</label>
             <input value={form[key] || ''} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} maxLength={max}
-              className="w-full bg-white/3 border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
+              className="w-full bg-[#1a1a1a] border border-white/10 focus:border-gold/50 text-white font-sans text-sm px-4 py-3 outline-none" />
           </div>
         ))}
         <div>
           <label className="font-mono text-xs text-white/30 tracking-widest uppercase block mb-2">Hero Video (replace)</label>
-          <label className="inline-flex items-center gap-2 bg-white/3 border border-white/10 hover:border-gold/30 px-4 py-3 cursor-pointer transition-colors max-w-full">
+          <label className="inline-flex items-center gap-2 bg-[#1a1a1a] border border-white/10 hover:border-gold/30 px-4 py-3 cursor-pointer transition-colors max-w-full">
             <span className="font-sans text-sm text-white/40 truncate max-w-xs">{file ? file.name : 'Choose new hero video…'}</span>
             <input type="file" accept="video/mp4,video/quicktime,video/webm" className="hidden"
               onChange={e => setFile(e.target.files[0])} />
@@ -628,7 +629,7 @@ function Sidebar({ open, onClose, onLogout }) {
                   transition-all duration-200 w-full
                   ${active
                     ? 'text-gold border-r-2 border-gold bg-gold/5'
-                    : 'text-white/30 hover:text-white/70 hover:bg-white/3'
+                    : 'text-white/30 hover:text-white/70 hover:bg-[#1a1a1a]'
                   }
                 `}
               >
