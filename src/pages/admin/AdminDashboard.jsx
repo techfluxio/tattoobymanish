@@ -375,6 +375,11 @@ function AboutPanel({ about, setAbout }) {
   const [loading,  setLoading]  = useState(false);
   const [progress, setProgress] = useState(0);
 
+  // Re-sync form when context updates (e.g. after save or page refresh)
+  useEffect(() => {
+    setForm({ ...about, specialties: (about.specialties || []).join(', ') });
+  }, [about]);
+
   const flash = (text, type = 'gold') => {
     setMsg({ text, type });
     setTimeout(() => setMsg({ text: '', type: 'gold' }), 3000);
@@ -457,9 +462,14 @@ function AboutPanel({ about, setAbout }) {
 // PANEL: CONTACT
 // ─────────────────────────────────────────────────────────────────────────────
 function ContactPanel({ contact, setContact }) {
-  const [form, setForm]   = useState({ ...contact });
-  const [msg,  setMsg]    = useState({ text: '', type: 'gold' });
+  const [form, setForm]       = useState({ ...contact });
+  const [msg,  setMsg]        = useState({ text: '', type: 'gold' });
   const [loading, setLoading] = useState(false);
+
+  // FIX 1: Re-sync form when contact context updates (after save or on mount)
+  useEffect(() => {
+    setForm({ ...contact });
+  }, [contact]);
 
   const flash = (text, type = 'gold') => {
     setMsg({ text, type });
@@ -469,12 +479,13 @@ function ContactPanel({ contact, setContact }) {
   const save = async () => {
     setLoading(true);
     try {
+      // FIX 2: Send socials as a plain array (not JSON.stringify'd string)
       const { data } = await api.put('/config/contact', {
         instagram:    form.instagram,
         instagramUrl: form.instagramUrl,
         whatsapp:     form.whatsapp,
         email:        form.email,
-        socials:      JSON.stringify(form.socials),
+        socials:      form.socials,   // ← plain array, not JSON.stringify(form.socials)
       });
       setContact(data.contact);
       flash('✓ Saved successfully');
@@ -508,7 +519,7 @@ function ContactPanel({ contact, setContact }) {
             value={form.socials?.find(s => s.platform === 'YouTube')?.handle || ''}
             onChange={e => setForm(f => ({
               ...f,
-              socials: f.socials.map(s =>
+              socials: (f.socials || []).map(s =>
                 s.platform === 'YouTube' ? { ...s, handle: e.target.value } : s
               )
             }))}
@@ -525,7 +536,7 @@ function ContactPanel({ contact, setContact }) {
             value={form.socials?.find(s => s.platform === 'YouTube')?.url || ''}
             onChange={e => setForm(f => ({
               ...f,
-              socials: f.socials.map(s =>
+              socials: (f.socials || []).map(s =>
                 s.platform === 'YouTube' ? { ...s, url: e.target.value } : s
               )
             }))}
@@ -558,6 +569,11 @@ function HomepagePanel({ homepage, setHomepage }) {
   const [msg,     setMsg]     = useState({ text: '', type: 'gold' });
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  // Re-sync form when homepage context updates
+  useEffect(() => {
+    setForm({ tagline: homepage.tagline, subtagline: homepage.subtagline });
+  }, [homepage]);
 
   const flash = (text, type = 'gold') => {
     setMsg({ text, type });

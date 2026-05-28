@@ -30,6 +30,13 @@ const icons = {
 export default function Contact() {
   const { contact } = useData();
 
+  // FIX: Read YouTube data from contact.socials instead of hardcoding
+  const youtube = contact.socials?.find(s => s.platform === 'YouTube');
+  const youtubeUrl    = youtube?.url    || '#';
+  const youtubeHandle = youtube?.handle
+    ? (youtube.handle.startsWith('@') ? youtube.handle : `@${youtube.handle}`)
+    : 'YouTube';
+
   return (
     <PageTransition>
       <div className="min-h-screen bg-obsidian pt-28 pb-20 px-6 md:px-12">
@@ -82,9 +89,9 @@ export default function Contact() {
               <span className="font-mono text-xs text-white/20 group-hover:text-gold transition-all duration-300 group-hover:translate-x-1">→</span>
             </motion.a>
 
-            {/* YouTube */}
+            {/* YouTube — FIX: dynamic data from contact.socials */}
             <motion.a
-              href="https://youtube.com/@tattoobymanish" target="_blank" rel="noopener noreferrer"
+              href={youtubeUrl} target="_blank" rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}
               className="group flex items-center gap-5 glass border border-white/5 hover:border-gold/40 p-6 transition-all duration-400"
             >
@@ -93,7 +100,7 @@ export default function Contact() {
               </div>
               <div className="flex-1">
                 <p className="font-sans text-xs text-white/30 tracking-widest uppercase mb-1">YouTube</p>
-                <p className="font-display text-xl text-white group-hover:text-gold transition-colors">@tattoobymanish</p>
+                <p className="font-display text-xl text-white group-hover:text-gold transition-colors">{youtubeHandle}</p>
               </div>
               <span className="font-mono text-xs text-white/20 group-hover:text-gold transition-all duration-300 group-hover:translate-x-1">→</span>
             </motion.a>
