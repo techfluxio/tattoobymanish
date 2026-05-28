@@ -32,7 +32,7 @@ export default function Contact() {
 
   // FIX: Read YouTube data from contact.socials instead of hardcoding
   const youtube = contact.socials?.find(s => s.platform === 'YouTube');
-  const youtubeUrl    = youtube?.url    || '#';
+  const youtubeUrl    = youtube?.url    || null;
   const youtubeHandle = youtube?.handle
     ? (youtube.handle.startsWith('@') ? youtube.handle : `@${youtube.handle}`)
     : 'YouTube';
