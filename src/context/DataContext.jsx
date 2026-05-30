@@ -5,31 +5,27 @@ const DataContext = createContext(null);
 
 const DEFAULT_CONFIG = {
   homepage: {
-    heroVideoUrl: '/hero-bg.mp4',
-    tagline: 'Art That Lives On Skin',
-    subtagline: 'Premium Tattoo Artistry · Ranchi, India',
+    heroVideoUrl: '',
+    tagline: '',
+    subtagline: '',
   },
   about: {
-    name: 'Manish Kumar',
-    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600',
-    bio: 'With over a decade of mastery in the art of tattooing, I bring visions to life on skin.',
-    specialties: ['Blackwork', 'Fine Line', 'Realism', 'Neo-Traditional', 'Mandala', 'Custom Design'],
-    experience: '10+ Years',
-    location: 'Ranchi, Jharkhand',
-    instagram: 'https://instagram.com/tattoobymanish',
-    whatsapp: '+91 98765 43210',
-    email: 'ink@tattoobymanish.com',
+    name: '',
+    photo: '',
+    bio: '',
+    specialties: [],
+    experience: '',
+    location: '',
+    instagram: '',
+    whatsapp: '',
+    email: '',
   },
   contact: {
-    instagram: '@tattoobymanish',
-    instagramUrl: 'https://instagram.com/tattoobymanish',
-    whatsapp: '+91 98765 43210',
-    email: 'ink@tattoobymanish.com',
-    socials: [
-      { platform: 'Instagram', handle: '@tattoobymanish', url: 'https://instagram.com/tattoobymanish' },
-      { platform: 'WhatsApp',  handle: '+91 98765 43210', url: 'https://wa.me/919876543210' },
-      { platform: 'YouTube',   handle: 'TattooByManish',  url: 'https://youtube.com/@tattoobymanish' },
-    ],
+    instagram: '',
+    instagramUrl: '',
+    whatsapp: '',
+    email: '',
+    socials: [],
   },
 };
 

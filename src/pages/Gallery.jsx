@@ -158,7 +158,7 @@ export default function Gallery() {
 
           {filtered.length === 0 && (
             <div className="text-center py-24 text-white/30 font-display text-2xl italic">
-              No works in this category yet.
+              No photos uploaded yet.
             </div>
           )}
         </div>
