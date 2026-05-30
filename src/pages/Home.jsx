@@ -11,6 +11,7 @@ const CINEMATIC_QUOTES = [
   { quote: "Every scar has a story. Every tattoo has a soul.", author: "Unknown" },
   { quote: "The only thing permanent is the art you choose to carry.", author: "Unknown" },
   { quote: "Tattoos are love letters written in pain and pride.", author: "Unknown" },
+  { quote: "Tattoos are love letters written in pain and pride.", author: "Unknown" },
 ];
 
 /* ─── Floating gold particle ─── */
