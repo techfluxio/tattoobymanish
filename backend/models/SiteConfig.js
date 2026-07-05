@@ -8,7 +8,7 @@ const siteConfigSchema = new mongoose.Schema({
     heroVideoUrl:      { type: String, default: '' },
     heroVideoPublicId: { type: String, default: '' },
     tagline:           { type: String, default: 'Art That Lives On Skin', maxlength: 100 },
-    subtagline:        { type: String, default: 'Premium Tattoo Artistry · Ranchi, India', maxlength: 100 },
+    subtagline:        { type: String, default: 'Premium Tattoo Artistry · Delhi, India', maxlength: 100 },
   },
 
   about: {
@@ -17,7 +17,7 @@ const siteConfigSchema = new mongoose.Schema({
     photoPublicId: { type: String, default: '' },
     bio:         { type: String, default: '', maxlength: 1000 },
     experience:  { type: String, default: '10+ Years', maxlength: 30 },
-    location:    { type: String, default: 'Ranchi, Jharkhand', maxlength: 100 },
+    location:    { type: String, default: 'Delhi, India', maxlength: 100 },
     specialties: [{ type: String, maxlength: 50 }],
     instagram:   { type: String, default: '' },
     whatsapp:    { type: String, default: '' },
