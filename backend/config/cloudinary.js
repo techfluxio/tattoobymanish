@@ -13,7 +13,7 @@ const imageStorage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => ({
     folder: 'tattoobymanish/images',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif'],
     transformation: [{ quality: 'auto', fetch_format: 'auto' }],
     public_id: `img_${Date.now()}`,
   }),
@@ -25,7 +25,7 @@ const videoStorage = new CloudinaryStorage({
   params: async (req, file) => ({
     folder:          'tattoobymanish/videos',
     resource_type:   'video',
-    allowed_formats: ['mp4', 'mov', 'webm'],
+    allowed_formats: ['mp4', 'mov', 'webm', 'm4v', 'mpeg', 'avi', 'mpg'],
     public_id:       `vid_${Date.now()}`,
   }),
 });
